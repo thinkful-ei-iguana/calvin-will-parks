@@ -6,28 +6,30 @@ function getStateParks(stateCode, limitValue) {
   fetch(`https://developer.nps.gov/api/v1/parks?stateCode=${stateCode}&limit=${limitValue}&api_key=ytdx5AuA9TtK3H6sSKIbzxiqhnl1Ro8nQfcX3lu6`)
     .then(response => response.json())
     .then(responseJson => displayStateParkResults(responseJson))
-    .catch(error => alert('Something went wrong. Try again later.'));
+    .catch(error => console.error(error));
 }
-
-
 
 function displayStateParkResults(responseJson) {
   console.log(responseJson);
-  for (let i = 0; i < responseJson.message.length; i++) { 
-    $('.results').append(`<div ${responseJson.message[i]}" class="results"></div>`); 
+  for (let i = 0; i < responseJson.data.length; i++) { 
+    let park = responseJson.data[i];
+    $('.results2').append(`<div class="results2"> 
+    <h2>${park.fullName}</h2>
+    <p>${park.description}</p>
+    <a href=${park.url}>Visit the park website</a>
+    </div>`);
     $('.results').removeClass('hidden');
   }
-console.log(responseJson.message);
 //display the results section
-$('.results').removeClass('hidden');
+$('.results2').removeClass('hidden');
 }
 
 
 function watchForm() {
   $('form').submit(event => {
     event.preventDefault();
-    let stateCode = $('#userFillable').val()
-    let limitValue = $('#userFillable2').val()
+    let stateCode = $('#userFillable').val();
+    let limitValue = $('#userFillable2').val();
     getStateParks(stateCode, limitValue);
     console.log(stateCode);
   });
