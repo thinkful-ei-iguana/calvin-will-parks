@@ -1,30 +1,39 @@
-"use strict";
+//API: ytdx5AuA9TtK3H6sSKIbzxiqhnl1Ro8nQfcX3lu6
 
-function getDogImage() {
-  fetch("https://dog.ceo/api/breeds/image/random")
+//https://www.nps.gov/index.htm
+
+function getStateParks(stateCode, limitValue) {
+  fetch(`https://developer.nps.gov/api/v1/parks?stateCode=${stateCode}&limit=${limitValue}&api_key=ytdx5AuA9TtK3H6sSKIbzxiqhnl1Ro8nQfcX3lu6`)
     .then(response => response.json())
-    .then(responseJson => displayResults(responseJson))
-    .catch(error => alert("Something went wrong. Try again later."));
+    .then(responseJson => displayStateParkResults(responseJson))
+    .catch(error => alert('Something went wrong. Try again later.'));
 }
 
-function displayResults(responseJson) {
+
+
+function displayStateParkResults(responseJson) {
   console.log(responseJson);
-  //replace the existing image with the new one
-  $(".results-img").replaceWith(
-    `<img src="${responseJson.message}" class="results-img">`
-  );
-  //display the results section
-  $(".results").removeClass("hidden");
+  for (let i = 0; i < responseJson.message.length; i++) { 
+    $('.results').append(`<div ${responseJson.message[i]}" class="results"></div>`); 
+    $('.results').removeClass('hidden');
+  }
+console.log(responseJson.message);
+//display the results section
+$('.results').removeClass('hidden');
 }
+
 
 function watchForm() {
-  $("form").submit(event => {
+  $('form').submit(event => {
     event.preventDefault();
-    getDogImage();
+    let stateCode = $('#userFillable').val()
+    let limitValue = $('#userFillable2').val()
+    getStateParks(stateCode, limitValue);
+    console.log(stateCode);
   });
 }
 
 $(function() {
-  console.log("App loaded! Waiting for submit!");
+  console.log('App loaded! Waiting for submit!');
   watchForm();
 });
